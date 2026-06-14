@@ -13,7 +13,7 @@ public class AuthResponse {
 
     private String token;
 
-    private String expiration;
+    private long expiration;
 
     private String tokenType;
     private Long id;

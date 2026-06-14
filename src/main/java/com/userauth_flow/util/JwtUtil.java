@@ -41,7 +41,7 @@ public class JwtUtil {
         if(userDetails instanceof User user){
             claims.put("role",user.getRole().name());
             claims.put("userId", user.getId());
-            claims.put("firstName", user.getFName());
+            claims.put("firstName", user.getFirstName());
         }
 
         return buildToken(claims,userDetails,jwtExpiration);

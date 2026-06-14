@@ -1,4 +1,4 @@
-package com.userauth_flow.dto.request;
+package com.userauth_flow.dto.response;
 
 import com.userauth_flow.entity.Role;
 import lombok.AllArgsConstructor;
@@ -7,19 +7,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RegisterRequest {
-
-    private String firstName;
-
-    private String lastName;
-
-    private String email;
-
-    private String password;
-
+@Builder
+public class RegisterResponse {
+    private Long          id;
+    private String        firstName;
+    private String        lastName;
+    private String        email;
     private Role role;
-
 }

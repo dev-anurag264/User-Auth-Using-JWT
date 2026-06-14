@@ -2,6 +2,7 @@ package com.userauth_flow.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -23,6 +24,7 @@ import java.util.List;
 @Data // -- getter setter toString hashcode requiredArgsConstructor
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class User implements UserDetails {
 
     @Id
@@ -30,11 +32,13 @@ public class User implements UserDetails {
     private Long id;
 
     @Column(name = "first_name" , nullable = false)
-    private String fName;
+    private String firstName;
 
     @Column(name = "last_name", nullable = false)
-    private String lName;
+    private String lastName;
 
+
+    //add unique - true
     @Column(name = "email", nullable = false)
     private String email;
 
