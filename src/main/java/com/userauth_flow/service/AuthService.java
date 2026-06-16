@@ -4,12 +4,12 @@ import com.userauth_flow.dto.request.LoginRequest;
 import com.userauth_flow.dto.request.RegisterRequest;
 import com.userauth_flow.dto.response.AuthResponse;
 import com.userauth_flow.entity.User;
-import com.userauth_flow.filter.JWTfilter;
 import com.userauth_flow.repository.UserRepository;
 import com.userauth_flow.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,7 +36,7 @@ public class AuthService {
               .firstName(request.getFirstName())
               .lastName(request.getLastName())
               .email(request.getEmail())
-              .password(request.getPassword())
+              .password(passwordEncoder.encode(request.getPassword()))
               .role(request.getRole())
               .build();
 
@@ -48,6 +48,25 @@ public class AuthService {
       String token = jwtUtil.generateToken(savedUser);
       return buildAuthResponse(savedUser,token);
 
+    }
+
+    @Transactional(readOnly = true)
+    public AuthResponse login(LoginRequest request){
+        log.warn("Login in user with email : {}", request.getEmail());
+
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        request.getEmail(),
+                        request.getPassword()
+                )
+        );
+
+        User user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> new RuntimeException("User not found"));
+
+        String jwtToken = jwtUtil.generateToken(user);
+        log.info("User logged in successfully. ID: {}, Role: {}", user.getId(), user.getRole());
+
+        return  buildAuthResponse(user,jwtToken);
     }
 
     private AuthResponse buildAuthResponse(User user, String jwtToken) {

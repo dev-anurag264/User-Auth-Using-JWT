@@ -26,9 +26,9 @@ public class AuthContoller {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> loginUser(
+    public ResponseEntity<AuthResponse> loginUser(
             @RequestBody LoginRequest request
             ){
-        return ResponseEntity.ok(authService.loginUser(request));
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(authService.login(request));
     }
 }
